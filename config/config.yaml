@@ -1,0 +1,41 @@
+POSTGRES_HOST: 10.10.12.12
+POSTGRES_DB: techniek
+POSTGRES_SCHEMA: datamanagement
+POSTGRES_PORT: 5432
+
+ROOT_DIR: /data/arnoldreinders/apps/datamanagement/root
+WORK_DIR: /data/arnoldreinders/apps/datamanagement/work
+
+# mandatory sub directories in WORK_DIR
+SUBDIRS:
+  - data
+  - docs
+  - done
+  - logs
+  - schemas
+  - sql
+  - todo
+
+# Data suppliers: translated into sub directories for each SUBDIRS in WORK_DIR
+SUPPLIERS:
+  - odl
+
+DOC: logic-model.md
+SQL: logic-model.sql
+
+# tables and schema definition files, each table has a corresponding definition file
+TABLES:
+  odl_rapportageperiodes: {from: odl_rapportageperiodes.csv}
+  bronbestand_attribuut_meta: {from: bronbestand_attribuut_meta.csv}
+  bronbestand_attribuut_extra: {from: bronbestand_attribuut_extra.csv}
+  bronbestand_bestand_meta: {from: bronbestand_bestand_meta.csv}
+  bronbestand_datakwaliteit_feit: {from: bronbestand_datakwaliteit_feit.csv}
+  bronbestand_datakwaliteit_codes: {from: bronbestand_datakwaliteit_codes.csv}
+  bronbestand_levering_feit: {from: bronbestand_levering_feit.csv}
+
+# list of columns to show in documentation, empty list means show all columns
+COLUMNS: []
+
+# Beginning and end of time
+BEGINNING_OF_WORLD: 1970-01-01 00:00:00
+END_OF_WORLD: 9999-12-31 23:59:59

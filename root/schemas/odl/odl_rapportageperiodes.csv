@@ -1,0 +1,9 @@
+kolomnaam;datatype;leverancier_kolomnaam;leverancier_kolomtype;domein;beschrijving
+Jaarlijks;text;(dido generated);J;;Jaarlijkse levering, voorbeeld: 2019-J
+Halfjaarlijks;text;(dido generated);H;1:2;Halfjaarlijkse levering, voorbeeld: 2012-H2
+Kwartaallijks;text;(dido generated);Q;1:4;Kwartaallijkse levering, voorbeeld: 2025-Q3
+Maandelijks;text;(dido generated);M;1:12;Maandelijkse levering, voorbeeld: 1995-M7
+Wekelijks;text;(dido generated);W;1:52;Wekelijkse levering, voorbeeld: 2008-W26
+Dagelijks;text;(dido generated);D;1:366;Dagelijkse levering, voorbeeld: 2020-D189
+Anders;text;(dido generated);A;;Anders, A gevolgd door een zelf gekozen nummer, voorbeeld: 2018-A4876, geen puntkomma's
+Initieel;text;(dido generated);I;;Initieel, de eerste levering, mag maar een keer voorkomen, I niet gevolgd door zelf gekozen nummer

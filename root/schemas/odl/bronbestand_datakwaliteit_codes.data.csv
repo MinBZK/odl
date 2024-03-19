@@ -1,0 +1,13 @@
+code_datakwaliteit;datakwaliteit_omschrijving;datakwaliteit_datum_begin;datakwaliteit_datum_einde;sysdatum
+-3;Data controle is bewust uitgezet - Geen controles plaatsgevonden;1970-12-31;9999-12-31;2023-10-20
+-2;Tabel - Tabel wordt niet gecontroleerd;1970-12-31;9999-12-31;2023-10-20
+-1;Ok - Alle ingelezen waardes zijn valide;1970-12-31;9999-12-31;2023-10-20
+0;Valide waarde;1970-12-31;9999-12-31;2023-10-20
+1;Domein - Waarde niet in lijst;1970-12-31;9999-12-31;2023-10-20
+2;Constraint - Geen waarde, wel verplicht;1970-12-31;9999-12-31;2023-10-20
+3;Domein - Waarde ligt niet tussen minimum en maximum;1970-12-31;9999-12-31;2023-10-20
+4;Bereik - Waarde buiten bereik;1970-12-31;9999-12-31;2023-10-20
+5;Onwaarschijnlijk - Waarde niet waarschijnlijk;1970-12-31;9999-12-31;2023-10-20
+6;Datatype - Waarde geen geaccepteerd datatype;1970-12-31;9999-12-31;2023-10-20
+7;Formaat - Waarde geen juist formaat;1970-12-31;9999-12-31;2023-10-20
+8;Domein - Waarde voldoet niet aan reguliere expressie;1970-12-31;9999-12-31;2023-10-20
