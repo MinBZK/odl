@@ -1,0 +1,1 @@
+Een .suffix.nd bestand als voorbeeld.

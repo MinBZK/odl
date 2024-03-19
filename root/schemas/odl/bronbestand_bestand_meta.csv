@@ -1,0 +1,17 @@
+kolomnaam;leverancier_kolomtype;datatype;keytype;constraints;domein;code_bronbestand;avg_classificatie;veiligheid_classificatie;kolom_expiratie_datum;attribuut_datum_begin;attribuut_datum_einde;beschrijving
+Code bronbestand sleutel;alfanumeriek;text;PK;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Unieke sleutel van de entiteit. Dit is volgens conventie de code van het bronbestand en een volgnummer
+Code bronbestand;alfanumeriek;text;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Unieke code voor identificatie van bronbestanden (BGFMHLWD: Bezettinggraad data van FMH voor locatie Leeuwarden).
+Bronbestand beschrijving;alfanumeriek;text;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Beschrijving van het bronbestand
+Bronbestand naamconventie;alfanumeriek;text;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;De standaard opbouw van de naam van het bronbestand
+Bronbestand leverancier;alfanumeriek;text;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Omschrijving van de authentieke leverancier/registratie van de brondata
+Bronbestand formaat;alfanumeriek;text;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Beschrijving van het formaat van het bronbestand (bv csv met puntkomma als seperator)
+Bronbestand decimaal;alfanumeriek;text;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Decimale teken dat wordt gebruikt bij de aangeleverde tabellen (komma of punt of iets anders)
+Bronbestand frequentielevering;alfanumeriek;text;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;De frequentie waarmee de beonbestanden worden geleverd (Jaar Halfjaar Quartaal Maand Week Dag of Anders)
+Bronbestand aantal attributen;integer;integer;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Het aantal attributen in het bronbestand
+Bronbestand gemiddeld aantal records;integer;integer;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Het gemiddeld aantal te verwachten records in de levering
+Bronbestand voorlooprecord;waar/niet waar;boolean;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Aanduiding of het bronbestand een voorlooprecord heeft
+Bronbestand sluitrecord;waar/niet waar;boolean;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Aanduiding of het bronbestand een sluitrecord heeft
+Bronbestand expiratie datum;datum;date;;NOT NULL;;ODL;1;1;9999-12-31;2023-10-20;9999-12-31;Datum waarop de tabel niet meer gebruikt mag worden. Het is aan de gebruiker om hierop te controleren.
+Bronbestand datum begin;datum;date;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Begindatum waarop de bronbestand wordt geleverd met bovenstaande kenmerken
+Bronbestand datum einde;datum;date;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;De laatste datum waarop de bronbestand wordt geleverd met bovenstaande kenmerken
+Sysdatum;datum;timestamp;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Datum inlezen data

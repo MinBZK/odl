@@ -1,0 +1,9 @@
+kolomnaam;leverancier_kolomtype;datatype;keytype;constraints;domein;avg_classificatie;veiligheid_classificatie;gebruiker_info_1;kolom_expiratie_datum;attribuut_datum_begin;attribuut_datum_einde;beschrijving
+Bronbestand recordnummer;teller;bigint;FK;NOT NULL;;1;1;;9999-12-31;2023-05-10;9999-12-31;Een sequentiële teller van de records die worden ingelezen in deze entiteit
+Code bronbestand;alfanumeriek;text;FK;NOT NULL;;1;1;;9999-12-31;2023-05-10;9999-12-31;Unieke code voor identificatie van bronbestanden (BGFMHLWD: Bezettinggraad data van FMH voor locatie Leeuwarden).
+Row number;numeriek;integer;;NOT NULL;;1;1;;9999-12-31;2023-05-10;9999-12-31;Rijnummer in oorspronkelijke data waar de fout werd gevonden
+Column name;alfanumeriek;text;;NOT NULL;;1;1;;9999-12-31;2023-05-10;9999-12-31;Naam van de kolom waar de fout werd gevonden
+Code attribuut;alfanumeriek;text;FK;NOT NULL;;1;1;;9999-12-31;2023-05-10;9999-12-31;Unieke code van attribuut x in het bronbestand. X is gelijk aan het aantal attributen in het bronbestand (zie 'Bronbestand aantal attributen' in 'Meta bronbestand')
+Code datakwaliteit;numeriek;integer;FK;NOT NULL;;1;1;;9999-12-31;2023-05-10;9999-12-31;Unieke code ter indicatie van de datakwaliteit van individuele waarde van een attribuut
+Levering rapportageperiode;alfanumeriek;text;;NOT NULL;;1;1;;9999-12-31;2023-05-10;9999-12-31;Unieke beschrijving van de boekings/rapportageperiode (WWYYYY(342023)/MMYYYY(112023)/QQYYYYY(022023)/YYYYYY(232023))
+Sysdatum;datum;timestamp;;NOT NULL;;1;1;;9999-12-31;2023-05-10;9999-12-31;Datum inlezen data

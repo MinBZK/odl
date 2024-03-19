@@ -1,0 +1,46 @@
+kolomnaam;code_attribuut_sleutel;code_attribuut;code_bronbestand;leverancier_kolomnaam;leverancier_kolomtype;leverancier_info_1;leverancier_info_2;datatype;keytype;constraints;domein;verstek;positie;avg_classificatie;veiligheid_classificatie;gebruiker_info_1;gebruiker_info_2;gebruiker_info_3;kolom_expiratie_datum;attribuut_datum_begin;attribuut_datum_einde;beschrijving
+kolomnaam;;;ODL;;text;;;text;;NOT NULL;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;Naam van de kolom zoals die bekend is bij de dataleverancier
+code_attribuut_sleutel;;;ODL;;text;;;serial;PK;NOT NULL;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;Unieke code. Conventie: De sleutel is de code van het attribuut en een volgnummer
+code_attribuut;;;ODL;;text;;;text;;NOT NULL;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;Unieke code van een attribuut. Conventie: code bronbestand aangevuld met een volgnummer
+code_bronbestand;;;ODL;;text;;;text;;NOT NULL;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;Unieke code voor identificatie van soorten bronbestanden
+leverancier_kolomnaam;;;ODL;;text;;;text;;;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;Naam van de kolom zoals die door de leverancier wordt geleverd
+leverancier_kolomtype;;;ODL;;text;;;text;;;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;Datatype van de kolom zoals opgegeven door de leverancier, vaak volgens het DBMS van de leverancier.
+leverancier_info_1;;;ODL;;text;;;text;;;;;;1;1;;;;9999-12-31;9999-12-31;9999-12-31;Extra informatie over leverancier
+leverancier_info_2;;;ODL;;text;;;text;;;;;;1;1;;;;9999-12-31;9999-12-31;9999-12-31;Extra informatie over leverancier
+datatype;;;ODL;;text;;;text;;NOT NULL;['text', 'integer', 'bigint', 'real', 'double', 'numeric', 'date', 'boolean'];;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;Postgres datatype dat door DWH wordt geaccepteerd (zie domein).
+keytype;;;ODL;;text;;;text;;;['', 'PK', 'FK'];;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;"PK = Primary Key
+FK = Foreign Key
+anders geen key"
+constraints;;;ODL;;text;;;text;;;['', 'NOT NULL'];;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;Database constraints: NOT NULL = waarde is verplicht, verder geen andere constrints
+domein;;;ODL;;text;;;text;;;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;"lijst met afzonderlijke waarden in datatype
+text: ['a', 'b', 'c']
+int: [1, 2, 3, 5, 8]
+float: [3.14, 2.57]
+
+Voor getallen: min:max volgens de python manier
+int: min:max
+float: min:max
+
+Datum volgens ISO-8601
+date: YYYY-MM-DD
+
+re: <regular expression>"
+verstek;;;ODL;;text;;;text;;;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;default waarde  indien niet ingevuld
+positie;;;ODL;;text;;;integer;;NOT NULL;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;Aanduiding van de positie van het attribuut in het bronbestand
+avg_classificatie;;;ODL;;text;;;integer;;NOT NULL;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;"Aanduiding van het datatype van het attribuut
+1=Geen persoonsgegeven
+2=Persoonsgegeven
+3=Bijzonder persoonsgegeven"
+veiligheid_classificatie;;;ODL;;text;;;integer;;NOT NULL;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;"Aanduiding van de vertrouwelijksclassificatie in het kader van de AVG van het attribuut
+1=Niet vertrouwelijk
+2=Departementaal vertrouwelijk
+3=Staatsgehein
+4=Staatsgeheim, zeer geheim
+5=Staatsgeheimn, Top Secret"
+gebruiker_info_1;;;ODL;;text;;;text;;;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;Veld dat de gebruiker kan gebruiken om extra informatie over deze kolom in op te slaan.
+gebruiker_info_2;;;ODL;;text;;;text;;;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;Veld dat de gebruiker kan gebruiken om extra informatie over deze kolom in op te slaan.
+gebruiker_info_3;;;ODL;;text;;;text;;;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;Veld dat de gebruiker kan gebruiken om extra informatie over deze kolom in op te slaan.
+kolom_expiratie_datum;;;ODL;;text;;;date;;;;;;1;1;;;;9999-12-31;2023-10-20;9999-12-31;Datum waarop de kolom niet meer gebruikt mag worden. D3g kontroleert hier niet op, dit is aan de gebruiker of gebruikersapplikatie.
+attribuut_datum_begin;;;ODL;;text;;;date;;NOT NULL;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;Begindatum waarop het attribuut wordt geleverd met bovenstaande kenmerken
+attribuut_datum_einde;;;ODL;;text;;;date;;NOT NULL;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;De laatste datum waarop het attribuut wordt geleverd met bovenstaande kenmerken
+beschrijving;;;ODL;;text;;;text;;NOT NULL;;;;1;1;;;;9999-12-31;2023-06-01;9999-12-31;Uitgebreide beschrijving van de kolom.

@@ -1,0 +1,16 @@
+Meta-attribuut;Waarde
+Code bronbestand;ODLDKF
+Bronbestand beschrijving;Datakwaliteitscore per bronbestand, voor een specifieke levering per record en attribuut
+Bronbestand naamconventie;ODLDKF
+Bronbestand leverancier;Team DWH
+Bronbestand formaat;csv
+Bronbestand decimaal;.
+Bronbestand frequentielevering;A
+Bronbestand aantal attributen;9
+Bronbestand gemiddeld aantal records;13
+Bronbestand voorlooprecord;0
+Bronbestand sluitrecord;0
+Bronbestand expiratie datum;9999-12-31
+Bronbestand datum begin;2023-06-01
+Bronbestand datum einde;9999-12-31
+Sysdatum;

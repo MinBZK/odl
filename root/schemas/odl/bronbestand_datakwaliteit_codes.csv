@@ -1,0 +1,19 @@
+kolomnaam;leverancier_kolomtype;datatype;keytype;constraints;domein;code_bronbestand;avg_classificatie;veiligheid_classificatie;gebruiker_info_1;kolom_expiratie_datum;attribuut_datum_begin;attribuut_datum_einde;beschrijving
+Code datakwaliteit;integer;integer;PK;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;"Unieke code ter indicatie van de datakwaliteit van individuele waarde van een attribuut
+Betekenis van de codes:
+-3=Bewust de datacontrole uitgezet
+-2=Import tabel voert geen datacontrole uit
+-1=Totaal aantal getelde fouten
+0=Geen fout ontdekt (wordt niet weggeschreven naar report files)
+1=Valide waarde
+2=Geen waarde, wel verplicht
+3=Geen waarde, niet verplicht
+4=Waarde buiten bereik
+5=Waarde niet waarschijnlijk
+6=Waarde geen juist datatype
+7=Waarde geen juist formaat
+"
+Datakwaliteit omschrijving;alfanumeriek;text;;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Omschrijving van de datakwaliteit
+Datakwaliteit datum begin;datum;date;;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Begindatum waarop de indicatie van de datakwaliteit, de code in combinatie met de omschrijving, actief is
+Datakwaliteit datum einde;datum;date;;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;De laatste datum waarop de indicatie van de datakwaliteit, de code in combinatie met de omschrijving, actief was
+Sysdatum;datum;timestamp;;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Datum inlezen data

@@ -1,0 +1,64 @@
+POSTGRES_HOST: 10.10.12.12
+POSTGRES_DB: huisvesting
+POSTGRES_SCHEMA: bezettingsgraad_test_automatisch_inladen
+POSTGRES_PORT: 5432
+
+PROJECT_NAME: bezettingsgraad
+ROOT_DIR: /data/arnoldreinders/projects/huisvesting/bezettingsgraad
+WORK_DIR: /data/arnoldreinders/projects/huisvesting/bezettingsgraad/workdir-d3g-test
+# WORK_DIR: /data/arnoldreinders/projects/huisvesting/bezettingsgraad/workdir
+
+# mandatory sub directories in WORK_DIR
+SUBDIRS:
+  - data
+  - docs
+  - done
+  - logs
+  - schemas
+  - sql
+  - todo
+
+# Data suppliers: translated into sub directories for each SUBDIRS in WORK_DIR
+SUPPLIERS:
+  bdienst: {
+            init: yes,
+            create: yes,
+            todo: yes,
+            source_file: Bronanalyse_Bdienst.csv
+           }
+  dji: {
+        init: yes,
+        create: yes,
+        todo: yes,
+        source_file: Bronanalyse_DJI.csv
+       }
+  fmh: {
+        init: yes,
+        create: yes,
+        todo: yes,
+        source_file: Bronanalyse_FMH.csv
+       }
+  rws: {
+        init: yes,
+        create: yes,
+        todo: yes,
+        source_file: Bronanalyse_RWS.csv
+       }
+
+# columns to show in documentation
+COLUMNS: 
+  - kolomnaam
+  #- kolomtype
+  #- pandastype
+  - datatype
+  - keytype
+  - constraints
+  - domein
+  - bronbestandcode
+  - attribuutcode
+  - positie
+  - avg_classificatie
+  - veiligheid_classificatie
+  - datum_start
+  - datum_eind
+  - beschrijving

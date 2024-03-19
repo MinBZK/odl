@@ -1,0 +1,12 @@
+kolomnaam;leverancier_kolomtype;datatype;keytype;constraints;domein;code_bronbestand;avg_classificatie;veiligheid_classificatie;gebruiker_info_1;kolom_expiratie_datum;attribuut_datum_begin;attribuut_datum_einde;beschrijving
+Levering rapportageperiode volgnummer;numeriek;integer;PK;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Uniek nummer voor dit record in de tabel
+Levering rapportageperiode;alfanumeriek;text;;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Unieke beschrijving van de boekings/rapportageperiode (WWYYYY(342023)/MMYYYY(112023)/QQYYYYY(022023)/YYYYYY(232023))
+Code bronbestand;alfanumeriek;text;;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Unieke code voor identificatie van bronbestanden (BGFMHLWD: Bezettinggraad data van FMH voor locatie Leeuwarden).
+Levering leveringsdatum;datum;date;;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;De datum waarop de levering is ontvangen in de staging area
+Levering goed voor verwerking;waar/niet waar;boolean;;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Indicatie of de levering geschikt is voor verwerking richting Operationele Data-laag
+Levering reden niet verwerken;alfanumeriek;text;;;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Omschrijving waarom de levering niet geschikt is voor verwerking richting Operationele Data-laag
+Levering verwerkingsdatum;datum;date;;;;ODL;1;1;9999-12-31;;2023-05-10;9999-12-31;Datum waarop de levering is verwerkt in de Operationele Data-laag
+Levering aantal records;integer;integer;;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Het aantal records dat is geleverd in het bronbestand en is verwerkt in de Operationela Data-laag
+Config file;text;text;;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;De configfile die is gebruikt bij het inlezen van deze levering
+Data filenaam;text;text;;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Naam van de datafile van deze levering
+Sysdatum;datum;timestamp;;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Datum inlezen data
