@@ -3,8 +3,8 @@ POSTGRES_DB: techniek
 POSTGRES_SCHEMA: datamanagement
 POSTGRES_PORT: 5432
 
-ROOT_DIR: /data/arnoldreinders/apps/datamanagement/root
-WORK_DIR: /data/arnoldreinders/apps/datamanagement/work
+ROOT_DIR: /data/arnoldreinders/apps/odl/root
+WORK_DIR: /data/arnoldreinders/apps/odl/work
 
 # mandatory sub directories in WORK_DIR
 SUBDIRS:

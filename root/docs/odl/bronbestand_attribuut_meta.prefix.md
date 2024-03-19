@@ -1,9 +1,11 @@
-D3G, de Document Data Definition Generator maakt gebruik van een aantal conventies om op basis van allerlei informatie de dokumentatie op te bouwen en de SQL te genereren die de database opbouwt. Uitgangspunt is de tabelnaam, die in dit *geval bronbestand_attribuut_meta* is. Deze tabelnaam is uitgangspunt voor een aantal files die binnen `d3g` gebruikt worden.
+DiDo, de Document Data Definition Generator maakt gebruik van een aantal conventies om op basis van allerlei informatie de dokumentatie op te bouwen en de SQL te genereren die de database opbouwt. Uitgangspunt is de tabelnaam, die in dit *geval bronbestand_attribuut_meta* is. Deze tabelnaam is uitgangspunt voor een aantal files die binnen `DiDo` gebruikt worden.
 
 ## .csv bestanden
-- bronbestand_attribuut_meta.csv - een .csb files die hieronder wordt gedokumenteerd. Deze bevat per attribuut in de tabel een rij in .csv formaat met definties. Bijvoorbeeld is het gegeven een persoonsgegeven of niet, wat is het datatype, enz. Deze beschrijvende informatie wordt weggeschreven naar een tabel met de naam (tabelnaam)_description, in dit voorbeeld *bronbestand_attribuut_meta_description*. 
+- bronbestand_attribuut_meta.csv - een .csb files die hieronder wordt gedokumenteerd. Deze bevat per attribuut in de tabel een rij in .csv formaat met definties. Bijvoorbeeld is het gegeven een persoonsgegeven of niet, wat is het datatype, enz. Deze beschrijvende informatie wordt weggeschreven naar een tabel met de naam (tabelnaam)_description, in dit voorbeeld *bronbestand_attribuut_meta_description*.
 - bronbestand_attribuut_meta.meta.csv - bevat metainformatie over deze tabel; wordt weggeschreven naar de tabel *bronbestand_attribuut_meta_meta*.
-- bronbestand_attribuut_meta.data.csv - bevat de data voor de vulling van deze tabel; komt terecht in de tabel *bronbestand_attribuut_meta_data*.
+- bronbestand_attribuDaarnaast dokumenteert DiDo de gegevens:
+-
+ut_meta.data.csv - bevat de data voor de vulling van deze tabel; komt terecht in de tabel *bronbestand_attribuut_meta_data*.
 
 ## .md bestanden
 De .csv bestanden worden ook gebruikt om tabellen te genereren voor dokumentatie. Deze dokumentatie geeft analisten antwoord op vragen als uit welke tabel moet ik mijn gegevens ophalen, wat is het datatype en wat betekenen die kolommen? Deze tabellen zijnh hieronder te bewonderen. De dokumentatie wordt gegenereerd in het markdown formaat. Een eenvoudige manier om snel nette tekst te genereren. Per tabel kunnen twee .md files (markdown) files worden gegenereerd:
@@ -11,7 +13,7 @@ De .csv bestanden worden ook gebruikt om tabellen te genereren voor dokumentatie
 bronbestand_attribuut_meta.suffix.md - tekst die aan het eind van de tabel wordt geplakt. Nuttig voor voorbeelden en dergelijke.
 
 ## Plaats van de bestanden
-D3G kent twee directories: de `root_dir` waar al je relevante bestanden staan: src, data, maar ook schemas en docs. De `root_dir` is onderdeel van je gitlab project. Omdat de .csv bestanden van de schemas relevante informatie bevatten wordt sterk aangeraden deze mee te laten tracken met de rest van je informatie, ondanks dat het .csv bestanden zijn.
+DiDo kent twee directories: de `root_dir` waar al je relevante bestanden staan: src, data, maar ook schemas en docs. De `root_dir` is onderdeel van je gitlab project. Omdat de .csv bestanden van de schemas relevante informatie bevatten wordt sterk aangeraden deze mee te laten tracken met de rest van je informatie, ondanks dat het .csv bestanden zijn.
 
 De benodigde bestanden worden uit `rootdir` ingelezen, bewerkt en vervolgens weggeschreven naar `workdir`. Beide directories specificeer je in de `config.yaml` file. De .csv bestanbden specificeer je in `schemas/odl` van de `rootdir`. Idem voor de dokumentatie.
 

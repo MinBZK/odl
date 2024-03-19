@@ -577,11 +577,12 @@ def load_schemas(tables: dict, root: str, work: str, supplier: str) -> dict:
 
         if exists(data_name):
             logger.info('[Reading data]')
-            tables[table]['data'] = pd.read_csv(data_name,
-                                                sep = ';',
-                                                dtype = str,
-                                                keep_default_na = False
-                                               ).fillna('')
+            tables[table]['data'] = pd.read_csv(
+                data_name,
+                sep = ';',
+                dtype = str,
+                keep_default_na = False
+            ).fillna('')
             if 'sysdatum' in tables[table]['data'].columns:
                 datumtijd = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 tables[table]['data']['sysdatum'] = datumtijd
