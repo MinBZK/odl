@@ -1,6 +1,7 @@
 kolomnaam;leverancier_kolomtype;datatype;keytype;constraints;domein;code_bronbestand;avg_classificatie;veiligheid_classificatie;kolom_expiratie_datum;attribuut_datum_begin;attribuut_datum_einde;beschrijving
 Code bronbestand sleutel;alfanumeriek;text;PK;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Unieke sleutel van de entiteit. Dit is volgens conventie de code van het bronbestand en een volgnummer
 Code bronbestand;alfanumeriek;text;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Unieke code voor identificatie van bronbestanden (BGFMHLWD: Bezettinggraad data van FMH voor locatie Leeuwarden).
+Created by;alfanumeriek;text;;;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Gberuikersnaam van de gebruiker die de tabel aanmaakte
 Bronbestand beschrijving;alfanumeriek;text;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Beschrijving van het bronbestand
 Bronbestand naamconventie;alfanumeriek;text;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;De standaard opbouw van de naam van het bronbestand
 Bronbestand leverancier;alfanumeriek;text;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Omschrijving van de authentieke leverancier/registratie van de brondata
@@ -14,4 +15,16 @@ Bronbestand sluitrecord;waar/niet waar;boolean;;NOT NULL;;ODL;1;1;9999-12-31;202
 Bronbestand expiratie datum;datum;date;;NOT NULL;;ODL;1;1;9999-12-31;2023-10-20;9999-12-31;Datum waarop de tabel niet meer gebruikt mag worden. Het is aan de gebruiker om hierop te controleren.
 Bronbestand datum begin;datum;date;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Begindatum waarop de bronbestand wordt geleverd met bovenstaande kenmerken
 Bronbestand datum einde;datum;date;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;De laatste datum waarop de bronbestand wordt geleverd met bovenstaande kenmerken
-Sysdatum;datum;timestamp;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Datum inlezen data
+ODL version major;integer;integer;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Major version of ODL definition, manually changed. Criterion is change number, meaning or type of columns
+ODL version major date;integer;timestamp;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;date of Major ODL version change
+ODL version minor;integer;integer;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Minor version of ODL definition, automatically incremented when running odl-creator, reset at major version change
+ODL version minor date;integer;timestamp;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;date of Minor ODL version change
+ODL version patch;integer;integer;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Build version of ODL definition, automatically incremented when running odl-creator
+ODL version patch date;integer;timestamp;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;date of Patch ODL version change
+DiDo version major;integer;integer;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Major version of DiDo, manually changed at major change of DiDo
+DiDo version major date;integer;timestamp;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;date of Major DiDo version change
+DiDo version minor;integer;integer;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Minor version of DiDo, automatically incremented when running odl-creator, reset to zero at major version change
+DiDo version minor date;integer;timestamp;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;date of Minor DiDo version change
+DiDo version patch;integer;integer;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Build version of DiDo, automatically incremented when running odl-creator
+DiDo version patch date;integer;timestamp;;NOT NULL;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;date of Patch DiDo version change
+Sysdatum;datum;timestamp;;;;ODL;1;1;9999-12-31;2023-05-10;9999-12-31;Datum inlezen data

@@ -1,15 +1,14 @@
 import os
 import sys
 
-from os.path import join, splitext, dirname, basename, exists
+from os.path import join, splitext, dirname, exists
 from datetime import datetime
 from random import randint
 import pandas as pd
 
-import yaml
+# import yaml
 
-from common import create_log, read_env, \
-    read_schema_file, split_filename, change_column_name
+import dido_common as dc
 
 # print all columns of dataframe
 pd.set_option('display.max_columns', 1000)
@@ -20,7 +19,7 @@ def write_documentation(filename: str, tables: list, root_dir: str, columns_to_w
     """ Generates documentation for each name in schema_names.
 
     The documentation is written in markdown format with a __TOC__
-    header for the Gitlab wiki.
+    header for the Gitlab wiki.importlib-metadata
 
     Args:
         filename (str): File to write documentation
@@ -99,7 +98,7 @@ def write_markup_doc(outfile: object,
         outfile.write('| ')
         outfile.write(index + ' | ') # meta.loc[index, 'Meta-attribuut'] + ' | ')
         if index == 'Sysdatum':
-            outfile.write(datetime.now().strftime('%Y-%m-%d %H-%M-%D') + ' |\n')
+            outfile.write(datetime.now().strftime(dc.DATETIME_FORMAT) + ' |\n')
 
         else:
             outfile.write(meta.loc[index, 'Waarde'] + ' |\n')
@@ -205,6 +204,8 @@ def write_sql(sql_filename: str,
     """
 
     with open(sql_filename, 'w') as outfile:
+        sql_code: str = '\set ON_ERROR_STOP on;\n\nBEGIN;\n'
+
         for table in tables:
             logger.info(f'[Processing {table}]')
 
@@ -214,7 +215,7 @@ def write_sql(sql_filename: str,
             data = tables[table]['data'] if 'data' in tables[table] else None
 
             # create SQL for the table description
-            sql_code: str = create_table_description(schema, meta, template,
+            sql_code += create_table_description(schema, meta, template,
                                                      tables[table]['schema_name'],
                                                      postgres_schema,
                                                      table,
@@ -236,6 +237,7 @@ def write_sql(sql_filename: str,
             outfile.write('\n\n')
 
         # for
+        outfile.write('\nCOMMIT;\n')
 
     # with
 
@@ -377,7 +379,6 @@ def apply_data_odl(template: pd.DataFrame, data: pd.DataFrame, meta: pd.DataFram
     Returns:
         pd.DataFrame: the filled out template
     """
-    # print(data.columns)
     if 'kolomnaam' not in data.columns:
         raise ValueError(f'* Data "{table}" *moet* "kolomnaam" bevatten. ODL generatie kan daar niet zonder')
 
@@ -397,15 +398,15 @@ def apply_data_odl(template: pd.DataFrame, data: pd.DataFrame, meta: pd.DataFram
     # if errors:
     #     raise ValueError('* Onbekende kolomnamen gespecificeerd, verdere controle is niet zinvol')
 
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = datetime.now().strftime(dc.DATE_FORMAT)
 
     new_df = pd.DataFrame(columns = template.columns, index = data.index, dtype = str)
 
     code_bbs: str = meta.loc['Code bronbestand', 'Waarde']
 
     # assign defaults
-    new_df['avg_classificatie'] = 1
-    new_df['veiligheid_classificatie'] = 1
+    new_df['avg_classificatie'] = '1'
+    new_df['veiligheid_classificatie'] = '1'
     new_df['attribuut_datum_begin'] = meta.loc['Bronbestand datum begin', 'Waarde']
     new_df['attribuut_datum_einde'] = meta.loc['Bronbestand datum einde', 'Waarde']
 
@@ -416,7 +417,7 @@ def apply_data_odl(template: pd.DataFrame, data: pd.DataFrame, meta: pd.DataFram
     # generate codes and keys
     for row, _ in new_df.iterrows():
         # ensure that kolomnaam is a postgres accepted column name
-        new_name = change_column_name(data.loc[row, 'kolomnaam'])
+        new_name = dc.change_column_name(data.loc[row, 'kolomnaam'])
 
         # when no name could be created, create a random one
         if len(new_name) == 0:
@@ -495,14 +496,14 @@ def apply_meta_odl(meta: pd.DataFrame, schema: pd.DataFrame):
     n_rows = len(schema)
     meta.loc['Bronbestand aantal attributen', 'Waarde'] = str(n_cols)
     meta.loc['Bronbestand gemiddeld aantal records', 'Waarde'] = str(n_rows)
-    meta.loc['Sysdatum', 'Waarde'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    meta.loc['Sysdatum', 'Waarde'] = datetime.now().strftime(dc.DATETIME_FORMAT)
 
     return meta
 
 ### apply_meta_odl ###
 
 
-def preprocess_schemas(tables):
+def preprocess_schemas(tables, server: dict):
 
     template = None
     for table in tables:
@@ -514,6 +515,8 @@ def preprocess_schemas(tables):
 
     if template is None:
         raise RuntimeError('*** internal error: no template found')
+
+    meta_data_name = ''
 
     for table in tables:
         schema = tables[table]['schema']
@@ -527,12 +530,29 @@ def preprocess_schemas(tables):
         new_schema.to_csv(tables[table]['schema_name'], sep = ';', index = False)
         new_meta.to_csv(tables[table]['meta_name'], sep = ';', index = True)
 
+        # process the data of some schemas
         if 'data' in tables[table]:
-            tables[table]['data'].to_csv(tables[table]['data_name'], sep = ';', index = False)
+            data_table = tables[table]['data']
+            # print(tables[table]['data'])
+
+            # substitute special column names by their values
+            for col in data_table.columns:
+                if col.lower() == 'sysdatum':
+                    nu = datetime.now().strftime(dc.DATETIME_FORMAT)
+                    data_table.loc[0, col] = nu
+                elif col.lower() == 'created_by':
+                    value = str(server['POSTGRES_USER'])
+                    data_table.loc[0, col] = value
+
+            if 'code_bronbestand' in data_table.columns:
+                meta_data_name = tables[table]['data_name']
+                # print(data_table)
+
+            data_table.to_csv(tables[table]['data_name'], sep = ';', index = False)
 
     # for
 
-    return tables, template
+    return tables, template, meta_data_name
 
 ### preprocess_schemas ###
 
@@ -557,7 +577,13 @@ def load_schemas(tables: dict, root: str, work: str, supplier: str) -> dict:
             tables[table]['template'] = False
 
         # read schema
-        tables[table]['schema'] = pd.read_csv(filename, sep = ';', dtype = str, keep_default_na = False, na_values = []).fillna('')
+        tables[table]['schema'] = pd.read_csv(
+            filename,
+            sep = ';',
+            dtype = str,
+            keep_default_na = False,
+            na_values = []
+        ).fillna('')
 
         # remove spaces from column names
         tables[table]['schema'].columns = tables[table]['schema'].columns.str.replace(' ', '')
@@ -566,7 +592,12 @@ def load_schemas(tables: dict, root: str, work: str, supplier: str) -> dict:
         tables[table]['schema_name'] = join(work, 'schemas', supplier, base)
 
         # read the meta information table of the schema
-        meta = pd.read_csv(meta_name, sep = ';', dtype = str, keep_default_na = False).fillna('')
+        meta = pd.read_csv(
+            meta_name,
+            sep = ';',
+            dtype = str,
+            keep_default_na = False
+        ).fillna('')
 
         # remove spaced from columns
         meta.columns = meta.columns.str.replace(' ', '')
@@ -584,7 +615,7 @@ def load_schemas(tables: dict, root: str, work: str, supplier: str) -> dict:
                 keep_default_na = False
             ).fillna('')
             if 'sysdatum' in tables[table]['data'].columns:
-                datumtijd = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                datumtijd = datetime.now().strftime(dc.DATETIME_FORMAT)
                 tables[table]['data']['sysdatum'] = datumtijd
 
             tables[table]['data_name'] = join(work, 'schemas', supplier, fn + '.data' + ext)
@@ -608,6 +639,114 @@ def load_schemas(tables: dict, root: str, work: str, supplier: str) -> dict:
     return tables
 
 ### load_schemas ###
+
+
+def update_odl_version(config: dict, filename: str):
+    """get the meta data from the odl database"""
+
+    logger.info('')
+
+    # fetch the meta data from file
+    meta_data = pd.read_csv(
+        filename,
+        sep = ';',
+        dtype = str,
+        keep_default_na = False,
+        na_values = []
+    ).fillna('')
+
+    # get the table name from file name
+    _, table_name, _ = dc.split_filename(filename)
+    table_name = table_name.replace('.', '_')
+
+    # get the odl server config from config
+    server_config = config['SERVER_CONFIGS']['ODL_SERVER_CONFIG']
+    meta_table = None
+
+    # fetch the table from the database
+    try:
+        meta_table = dc.load_odl_table(table_name, server_config)
+
+    # Some error occured, information could not be fetch from the database
+    # No updates of the version will take place as this depends on the
+    # versions stored in the database.
+    except Exception as e:
+        logger.warning('!!! Current version could not be fetched from the database.')
+        logger.warning('!!! See logfile for details')
+        logger.debug(e)
+
+    # try..except
+
+    if meta_table is not None:
+        # get the odl versions
+        major = int(meta_table.loc[0, dc.ODL_VERSION_MAJOR])
+        minor = int(meta_table.loc[0, dc.ODL_VERSION_MINOR])
+        patch = int(meta_table.loc[0, dc.ODL_VERSION_PATCH])
+        major_date = meta_table.loc[0, dc.ODL_VERSION_MAJOR_DATE]
+        minor_date = meta_table.loc[0, dc.ODL_VERSION_MINOR_DATE]
+        patch_date = meta_table.loc[0, dc.ODL_VERSION_PATCH_DATE]
+
+        # Update versioning
+        major_update = dc.get_par(config, 'UPDATE_MAJOR_VERSION')
+        minor_update = dc.get_par(config, 'UPDATE_MINOR_VERSION')
+        nu = datetime.now()
+
+        if major_update and minor_update:
+            raise dc.DiDoError('Config: Major and Minor version update are set. Only one (or neither) may be set.')
+
+        # if major update, incr major version and set rest to zero
+        if major_update:
+            major += 1
+            minor = 0
+            patch = 0
+            major_date = nu
+            minor_date = nu
+            patch_date = nu
+
+            logger.info(f'[Major ODL version will be updated to {major}]')
+
+        # if minor update, incr major version and set patch to zero
+        elif minor_update:
+            minor += 1
+            patch = 0
+            minor_date = nu
+            patch_date = nu
+
+            logger.info(f'[Minor ODL version will be updated to {minor}]')
+
+        # each run is a patch update
+        else:
+            patch += 1
+            patch_date = nu
+
+            logger.info(f'[Patch ODL version updated to {patch}]')
+
+        # if
+
+        # set new values
+        meta_data.loc[0, dc.ODL_VERSION_MAJOR] = str(major)
+        meta_data.loc[0, dc.ODL_VERSION_MINOR] = str(minor)
+        meta_data.loc[0, dc.ODL_VERSION_PATCH] = str(patch)
+        meta_data.loc[0, dc.ODL_VERSION_MAJOR_DATE] = \
+            major_date.strftime(dc.DATETIME_FORMAT)
+        meta_data.loc[0, dc.ODL_VERSION_MINOR_DATE] = \
+            minor_date.strftime(dc.DATETIME_FORMAT)
+        meta_data.loc[0, dc.ODL_VERSION_PATCH_DATE] = \
+            patch_date.strftime(dc.DATETIME_FORMAT)
+
+        meta_data.to_csv(
+            filename,
+            sep = ';',
+            index = False,
+        )
+
+        logger.info(f'[ODL version will be set to {major}.{minor}.{patch}]')
+        logger.info('')
+    # if
+
+    return
+
+### update_odl_version ###
 
 
 def create_workdir(workdir: str, sub_dirs: list, subsubdirs: list):
@@ -661,21 +800,25 @@ if __name__ == '__main__':
 
     # if
 
-    # Read environment file and initialize variables
-    credentials = read_env(join(root_dir, 'config', '.env'))
-    with open("config/config.yaml", "r") as infile:
-        env = yaml.safe_load(infile)
+    # credentials = read_env(join(root_dir, 'config', '.env'))
+    # with open("config/config.yaml", "r") as infile:
+    #     env = yaml.safe_load(infile)
+
+    # read the configuration file
+    cwd = os.getcwd()
+    config = dc.read_config(cwd)
 
     # get all configuration
-    root_dir: str = env['ROOT_DIR']
-    work_dir: str = env['WORK_DIR']
-    subdirs: list = env['SUBDIRS'] # subdirectories in root_dir
-    work: list = env['SUPPLIERS']  # subdirectories under each subdirectory
-    doc: str = env['DOC']          # name of file for all documentaiont
-    sql: str = env['SQL']          # name of file for SQL DDL
-    schema_name: str = env['POSTGRES_SCHEMA']
-    table_dict: dict = env['TABLES']  # dictionary with all tables to create
-    columns_to_write = env['COLUMNS'] # columns to write into documentation
+    root_dir: str = config['ROOT_DIR']
+    work_dir: str = config['WORK_DIR']
+    subdirs: list = config['SUBDIRS'] # subdirectories in root_dir
+    work: list = config['SUPPLIERS']  # subdirectories under each subdirectory
+    doc: str = config['DOC']          # name of file for all documentaiont
+    sql: str = config['SQL']          # name of file for SQL DDL
+    server = config['SERVER_CONFIGS']['ODL_SERVER_CONFIG']
+    schema_name: str = server['POSTGRES_SCHEMA']
+    table_dict: dict = config['TABLES']  # dictionary with all tables to create
+    columns_to_write = config['COLUMNS'] # columns to write into documentation
 
     # read product names
     create_workdir(work_dir, subdirs, work)
@@ -683,7 +826,7 @@ if __name__ == '__main__':
 
     # ceate logger
     log_file: str = join(work_dir, 'logs', 'odl-creator.log')
-    logger = create_log(log_file, level = 'DEBUG')
+    logger = dc.create_log(log_file, level = 'DEBUG')
     logger.info(f'log_file is {log_file}')
 
     # create the documentation and sql filename
@@ -694,9 +837,9 @@ if __name__ == '__main__':
 
     schemas = load_schemas(table_dict, root_dir, work_dir, data_model)
 
-    schemas, template = preprocess_schemas(schemas)
-
-    # comments: str = join(work_dir, join(schema_work, env['COMMENTS']))
+    schemas, template, meta_data_filename = preprocess_schemas(schemas, server)
+    if len(meta_data_filename) > 0:
+        update_odl_version(config, meta_data_filename)
 
     # give feedback on the filenames
     logger.info('')

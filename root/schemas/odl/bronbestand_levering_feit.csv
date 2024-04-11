@@ -2,6 +2,7 @@ kolomnaam;leverancier_kolomtype;datatype;keytype;constraints;domein;code_bronbes
 Levering rapportageperiode volgnummer;numeriek;integer;PK;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Uniek nummer voor dit record in de tabel
 Levering rapportageperiode;alfanumeriek;text;;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Unieke beschrijving van de boekings/rapportageperiode (WWYYYY(342023)/MMYYYY(112023)/QQYYYYY(022023)/YYYYYY(232023))
 Code bronbestand;alfanumeriek;text;;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Unieke code voor identificatie van bronbestanden (BGFMHLWD: Bezettinggraad data van FMH voor locatie Leeuwarden).
+Created by;alfanumeriek;text;;;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Naam van de gebruiker die de levering aanmaakte
 Levering leveringsdatum;datum;date;;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;De datum waarop de levering is ontvangen in de staging area
 Levering goed voor verwerking;waar/niet waar;boolean;;NOT NULL;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Indicatie of de levering geschikt is voor verwerking richting Operationele Data-laag
 Levering reden niet verwerken;alfanumeriek;text;;;;ODL;1;1;;9999-12-31;2023-05-10;9999-12-31;Omschrijving waarom de levering niet geschikt is voor verwerking richting Operationele Data-laag
