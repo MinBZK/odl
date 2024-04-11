@@ -1,0 +1,4 @@
+SERVERS:
+  datawarehouse_dev: 10.10.12.12
+  datawarehouse_acc: 10.10.12.13
+  datawarehouse_prd: 10.10.12.6

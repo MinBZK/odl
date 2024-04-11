@@ -1,1 +1,1 @@
-Een .suffix.nd bestand als voorbeeld.
+Hieronder volgen de tabellen met "hulp" informatie. Deze worden gebruikt om zaken op te slaan als datakwaliteit, leveringen, meta-informatie en dergelijke.

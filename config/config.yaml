@@ -1,10 +1,30 @@
-POSTGRES_HOST: 10.10.12.12
-POSTGRES_DB: techniek
-POSTGRES_SCHEMA: datamanagement
-POSTGRES_PORT: 5432
+PROJECT_NAME: odl
 
-ROOT_DIR: /data/arnoldreinders/apps/datamanagement/root
-WORK_DIR: /data/arnoldreinders/apps/datamanagement/work
+# database credentials for ODL database. Do not fill out POSTGRES_USER and _PW
+# Will be added by those of your .env file
+SERVER_CONFIGS:
+  ODL_SERVER_CONFIG:
+    POSTGRES_PORT: 5432
+    POSTGRES_DB: techniek
+    POSTGRES_SCHEMA: datamanagement
+
+  # database credentials for storing the data. _USER and _PW will be added from .env
+  DATA_SERVER_CONFIG:
+    POSTGRES_PORT: 5432
+    POSTGRES_DB: data
+    POSTGRES_SCHEMA: odl
+
+  # database credentials for xtracting the data. _USER and _PW will be added from .env
+  FOREIGN_SERVER_CONFIG:
+    POSTGRES_PORT: 5432
+    POSTGRES_DB: data
+    POSTGRES_SCHEMA: odl
+
+# select server to use as POSTGRES_HOST
+HOST: datawarehouse_dev
+
+ROOT_DIR: /data/arnoldreinders/apps/odl/root
+WORK_DIR: /data/arnoldreinders/apps/odl/work
 
 # mandatory sub directories in WORK_DIR
 SUBDIRS:
@@ -22,6 +42,9 @@ SUPPLIERS:
 
 DOC: logic-model.md
 SQL: logic-model.sql
+
+UPDATE_MAJOR_VERSION: no
+UPDATE_MINOR_VERSION: no
 
 # tables and schema definition files, each table has a corresponding definition file
 TABLES:

@@ -2,7 +2,9 @@ mypy
 pylint
 PyYAML
 pandas
+psutil
 openpyxl
 python-dotenv
 psycopg2-binary
 SQLAlchemy
+importlib-metadata
