@@ -6,8 +6,6 @@ from datetime import datetime
 from random import randint
 import pandas as pd
 
-# import yaml
-
 import dido_common as dc
 
 # print all columns of dataframe
@@ -59,9 +57,6 @@ def write_documentation(filename: str, tables: list, root_dir: str, columns_to_w
 def write_markup_doc(outfile: object,
                      tables: dict,
                      table_name: str,
-                    #  schema: pd.DataFrame,
-                    #  meta: pd.DataFrame,
-                    #  data: pd.DataFrame,
                      columns_to_write: list,
                     ):
 
@@ -533,7 +528,6 @@ def preprocess_schemas(tables, server: dict):
         # process the data of some schemas
         if 'data' in tables[table]:
             data_table = tables[table]['data']
-            # print(tables[table]['data'])
 
             # substitute special column names by their values
             for col in data_table.columns:
@@ -546,7 +540,6 @@ def preprocess_schemas(tables, server: dict):
 
             if 'code_bronbestand' in data_table.columns:
                 meta_data_name = tables[table]['data_name']
-                # print(data_table)
 
             data_table.to_csv(tables[table]['data_name'], sep = ';', index = False)
 
@@ -614,6 +607,7 @@ def load_schemas(tables: dict, root: str, work: str, supplier: str) -> dict:
                 dtype = str,
                 keep_default_na = False
             ).fillna('')
+
             if 'sysdatum' in tables[table]['data'].columns:
                 datumtijd = datetime.now().strftime(dc.DATETIME_FORMAT)
                 tables[table]['data']['sysdatum'] = datumtijd
