@@ -32,12 +32,12 @@ def write_documentation(filename: str, tables: list, root_dir: str, columns_to_w
             logger.info(f'[Documenting {table}]')
 
             # get schema file
-            schema = tables[table]['schema']
-            meta = tables[table]['meta']
-            data = tables[table]['data'] if 'data' in tables[table] else None
+            # schema = tables[table]['schema']
+            # meta = tables[table]['meta']
+            # data = tables[table]['data'] if 'data' in tables[table] else None
 
-            # create a name for optional extra markdown information
-            markname = join(root_dir, 'docs', table + '.csv.')
+            # # create a name for optional extra markdown information
+            # markname = join(root_dir, 'docs', table + '.csv.')
 
             # create documentation
             write_markup_doc(outfile, tables, table, columns_to_write)
@@ -199,8 +199,9 @@ def write_sql(sql_filename: str,
     """
 
     with open(sql_filename, 'w') as outfile:
-        sql_code: str = '\set ON_ERROR_STOP on;\n\nBEGIN;\n'
+        outfile.write('BEGIN;\n\n')
 
+        sql_code: str = ''
         for table in tables:
             logger.info(f'[Processing {table}]')
 
@@ -210,28 +211,33 @@ def write_sql(sql_filename: str,
             data = tables[table]['data'] if 'data' in tables[table] else None
 
             # create SQL for the table description
-            sql_code += create_table_description(schema, meta, template,
-                                                     tables[table]['schema_name'],
-                                                     postgres_schema,
-                                                     table,
-                                                    )
+            sql_code += create_table_description(
+                schema = schema,
+                meta = meta,
+                template = template,
+                filename = tables[table]['schema_name'],
+                schema_name = postgres_schema,
+                table = table,
+            )
 
             # Check if there are data present for the current schema
             # if so create a table with the data
             if data is not None:
                 logger.info(f'=== Creating data for {table} ===')
-                sql_code += create_table(schema, meta, data,
-                                             tables[table]['data_name'],
-                                             postgres_schema,
-                                             table,
-                                            )
+                sql_code += create_table(
+                    schema = schema,
+                    meta = meta,
+                    data = data,
+                    data_name = tables[table]['data_name'],
+                    schema_name = postgres_schema,
+                    table = table,
+                )
 
-            # # if
-
-            outfile.write(sql_code)
-            outfile.write('\n\n')
+            # if
 
         # for
+
+        outfile.write(sql_code)
         outfile.write('\nCOMMIT;\n')
 
     # with
@@ -378,7 +384,7 @@ def apply_data_odl(template: pd.DataFrame, data: pd.DataFrame, meta: pd.DataFram
         raise ValueError(f'* Data "{table}" *moet* "kolomnaam" bevatten. ODL generatie kan daar niet zonder')
 
     if template is None:
-        raise ValueError(f'* Data "{table}": de file "bronbestand_attribuut_meta.csv" file ontbreekt. ODL generatie kan daar niet zonder.')
+        raise ValueError(f'* Data "{table}": de file "bronbestand_attribuutmeta.csv" file ontbreekt. ODL generatie kan daar niet zonder.')
 
     if meta is None:
         raise ValueError(f'* Data "{table}": de file "bronbestand_attribuut_meta.meta.csv" file ontbreekt. ODL generatie kan daar niet zonder.')
@@ -564,7 +570,7 @@ def load_schemas(tables: dict, root: str, work: str, supplier: str) -> dict:
         meta_name = join(schema_root, fn + '.meta' + ext)
         data_name = join(schema_root, fn + '.data' + ext)
 
-        if fn == 'bronbestand_attribuut_meta':
+        if fn == 'bronbestand_attribuutmeta':
             tables[table]['template'] = True
         else:
             tables[table]['template'] = False
@@ -636,7 +642,15 @@ def load_schemas(tables: dict, root: str, work: str, supplier: str) -> dict:
 
 
 def update_odl_version(config: dict, filename: str):
-    """get the meta data from the odl database"""
+    """ Update the patch of ODL version
+
+    Args:
+        config (dict): ODL configuration dictionary
+        filename (str): Meta data file name
+
+    Raises:
+        dc.DiDoError: _description_
+    """
 
     logger.info('')
 
@@ -660,83 +674,64 @@ def update_odl_version(config: dict, filename: str):
     # fetch the table from the database
     try:
         meta_table = dc.load_odl_table(table_name, server_config)
+        version = meta_table.loc[0, dc.ODL_VERSION]
 
     # Some error occured, information could not be fetch from the database
     # No updates of the version will take place as this depends on the
     # versions stored in the database.
     except Exception as e:
+        version = dc.get_par(config, 'INITIAL_VERSION')
         logger.warning('!!! Current version could not be fetched from the database.')
-        logger.warning('!!! See logfile for details')
+        logger.warning(f'!!! Initial version from config provided: {version}')
         logger.debug(e)
 
     # try..except
 
-    if meta_table is not None:
-        # get the odl versions
-        major = int(meta_table.loc[0, dc.ODL_VERSION_MAJOR])
-        minor = int(meta_table.loc[0, dc.ODL_VERSION_MINOR])
-        patch = int(meta_table.loc[0, dc.ODL_VERSION_PATCH])
-        major_date = meta_table.loc[0, dc.ODL_VERSION_MAJOR_DATE]
-        minor_date = meta_table.loc[0, dc.ODL_VERSION_MINOR_DATE]
-        patch_date = meta_table.loc[0, dc.ODL_VERSION_PATCH_DATE]
+    major, minor, patch = version.split('.')
+    major = int(major)
+    minor = int(minor)
+    patch = int(patch)
 
-        # Update versioning
-        major_update = dc.get_par(config, 'UPDATE_MAJOR_VERSION')
-        minor_update = dc.get_par(config, 'UPDATE_MINOR_VERSION')
-        nu = datetime.now()
+    # Update versioning
+    major_update = dc.get_par(config, 'UPDATE_MAJOR_VERSION')
+    minor_update = dc.get_par(config, 'UPDATE_MINOR_VERSION')
+    nu = datetime.now()
 
-        if major_update and minor_update:
-            raise dc.DiDoError('Config: Major and Minor version update are set. Only one (or neither) may be set.')
+    if major_update and minor_update:
+        raise dc.DiDoError('Config: Major and Minor version update are set. Only one (or neither) may be set.')
 
-        # if major update, incr major version and set rest to zero
-        if major_update:
-            major += 1
-            minor = 0
-            patch = 0
-            major_date = nu
-            minor_date = nu
-            patch_date = nu
+    # if major update, incr major version and set rest to zero
+    if major_update:
+        major += 1
+        minor = 0
+        patch = 0
 
-            logger.info(f'[Major ODL version will be updated to {major}]')
+        logger.info(f'[Major ODL version will be updated to {major}]')
 
-        # if minor update, incr major version and set patch to zero
-        elif minor_update:
-            minor += 1
-            patch = 0
-            minor_date = nu
-            patch_date = nu
+    # if minor update, incr major version and set patch to zero
+    elif minor_update:
+        minor += 1
+        patch = 0
 
-            logger.info(f'[Minor ODL version will be updated to {minor}]')
+        logger.info(f'[Minor ODL version will be updated to {minor}]')
 
-        # each run is a patch update
-        else:
-            patch += 1
-            patch_date = nu
+    # each run is a patch update
+    else:
+        patch += 1
 
-            logger.info(f'[Patch ODL version updated to {patch}]')
+        logger.info(f'[Patch ODL version updated to {patch}]')
 
-        # if
-
-        # set new values
-        meta_data.loc[0, dc.ODL_VERSION_MAJOR] = str(major)
-        meta_data.loc[0, dc.ODL_VERSION_MINOR] = str(minor)
-        meta_data.loc[0, dc.ODL_VERSION_PATCH] = str(patch)
-        meta_data.loc[0, dc.ODL_VERSION_MAJOR_DATE] = \
-            major_date.strftime(dc.DATETIME_FORMAT)
-        meta_data.loc[0, dc.ODL_VERSION_MINOR_DATE] = \
-            minor_date.strftime(dc.DATETIME_FORMAT)
-        meta_data.loc[0, dc.ODL_VERSION_PATCH_DATE] = \
-            patch_date.strftime(dc.DATETIME_FORMAT)
-
-        meta_data.to_csv(
-            filename,
-            sep = ';',
-            index = False,
-        )
-
-        logger.info(f'[ODL version will be set to {major}.{minor}.{patch}]')
-        logger.info('')
     # if
+
+    # set new values
+    new_version = f'{major}.{minor}.{patch}'
+    meta_data.loc[0, dc.ODL_VERSION] = new_version
+    meta_data.loc[0, dc.ODL_VERSION_DATE] = nu.strftime(dc.DATETIME_FORMAT)
+
+    meta_data.to_csv(filename, sep = ';', index = False)
+
+    logger.info(f'[ODL version will be set to {new_version}]')
+    logger.info('')
 
     return
 
