@@ -23,6 +23,11 @@ SERVER_CONFIGS:
 # select server to use as POSTGRES_HOST
 HOST: datawarehouse_dev
 
+# Optionally set major and minor versions
+UPDATE_MAJOR_VERSION: no
+UPDATE_MINOR_VERSION: yes
+INITIAL_VERSION: 0.3.0
+
 ROOT_DIR: /data/arnoldreinders/apps/odl/root
 WORK_DIR: /data/arnoldreinders/apps/odl/work
 
@@ -43,18 +48,15 @@ SUPPLIERS:
 DOC: logic-model.md
 SQL: logic-model.sql
 
-UPDATE_MAJOR_VERSION: no
-UPDATE_MINOR_VERSION: no
-
 # tables and schema definition files, each table has a corresponding definition file
 TABLES:
   odl_rapportageperiodes: {from: odl_rapportageperiodes.csv}
-  bronbestand_attribuut_meta: {from: bronbestand_attribuut_meta.csv}
-  bronbestand_attribuut_extra: {from: bronbestand_attribuut_extra.csv}
-  bronbestand_bestand_meta: {from: bronbestand_bestand_meta.csv}
-  bronbestand_datakwaliteit_feit: {from: bronbestand_datakwaliteit_feit.csv}
-  bronbestand_datakwaliteit_codes: {from: bronbestand_datakwaliteit_codes.csv}
-  bronbestand_levering_feit: {from: bronbestand_levering_feit.csv}
+  bronbestand_attribuutmeta: {from: bronbestand_attribuutmeta.csv}
+  bronbestand_attribuutextra: {from: bronbestand_attribuutextra.csv}
+  bronbestand_bestandmeta: {from: bronbestand_bestandmeta.csv}
+  bronbestand_datakwaliteit: {from: bronbestand_datakwaliteit.csv}
+  bronbestand_datakwaliteitcodes: {from: bronbestand_datakwaliteitcodes.csv}
+  bronbestand_levering: {from: bronbestand_levering.csv}
 
 # list of columns to show in documentation, empty list means show all columns
 COLUMNS: []

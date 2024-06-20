@@ -23,16 +23,16 @@ logger = logging.getLogger()
 
 # define constants
 # set defaults
-SCHEMA_TEMPLATE = 'bronbestand_attribuut_meta_description'
-META_TEMPLATE   = 'bronbestand_bestand_meta_description'
-EXTRA_TEMPLATE  = 'bronbestand_attribuut_extra_description'
+# SCHEMA_TEMPLATE = 'bronbestand_attribuutmeta_description'
+# META_TEMPLATE   = 'bronbestand_bestandmeta_description'
+# EXTRA_TEMPLATE  = 'bronbestand_attribuutextra_description'
 
 # TAG_TABLE refer to TABLES indices in the confif.yaml file
 TAG_TABLE_SCHEMA   = 'schema'
 TAG_TABLE_META     = 'meta'
 TAG_TABLE_EXTRA    = 'extra'
-TAG_TABLE_DELIVERY = 'levering_feit'
-TAG_TABLE_QUALITY  = 'datakwaliteit_feit'
+TAG_TABLE_DELIVERY = 'levering'
+TAG_TABLE_QUALITY  = 'datakwaliteit'
 
 # Tags refer to dictionary indices of each table
 TAG_TABLES = 'tables'
@@ -78,18 +78,10 @@ DIR_SQL     = 'sql'
 VAL_DIDO_GEN = '(dido generated)'
 
 # Version labels
-ODL_VERSION_MAJOR  = 'odl_version_major'
-ODL_VERSION_MINOR  = 'odl_version_minor'
-ODL_VERSION_PATCH  = 'odl_version_patch'
-ODL_VERSION_MAJOR_DATE  = 'odl_version_major_date'
-ODL_VERSION_MINOR_DATE  = 'odl_version_minor_date'
-ODL_VERSION_PATCH_DATE  = 'odl_version_patch_date'
-DIDO_VERSION_MAJOR = 'dido_version_major'
-DIDO_VERSION_MINOR = 'dido_version_minor'
-DIDO_VERSION_PATCH = 'dido_version_patch'
-DIDO_VERSION_MAJOR_DATE = 'dido_version_major_date'
-DIDO_VERSION_MINOR_DATE = 'dido_version_minor_date'
-DIDO_VERSION_PATCH_DATE = 'dido_version_patch_date'
+ODL_VERSION  = 'odl_version'
+ODL_VERSION_DATE  = 'odl_version_date'
+DIDO_VERSION = 'dido_version'
+DIDO_VERSION_DATE = 'dido_version_date'
 
 # Miscellaneous
 DATE_FORMAT = '%Y-%m-%d'
@@ -648,10 +640,16 @@ def read_config(project_dir: str) -> dict:
     # fetch rapportage leveringsperiodes from odl
     odl_server = config['SERVER_CONFIGS']['ODL_SERVER_CONFIG']
     #odl_server['POSTGRES_HOST'] = '10.10.12.6'
-    rapportage_periodes = load_odl_table('odl_rapportageperiodes_description', odl_server)
+
+    # when initializing a new database odl_)rapportageperiodes does not exist, assign None
+    try:
+        rapportage_periodes = load_odl_table('odl_rapportageperiodes_description', odl_server)
+        config['REPORT_PERIODS'] = rapportage_periodes
+
+    except:
+        logger.warning('!!! No odl_rapportageperiodes_description present. You are creating a new database?')
 
     # assign these tot the config file
-    config['REPORT_PERIODS'] = rapportage_periodes
     config['PARAMETERS'] = parameters
 
     return config
